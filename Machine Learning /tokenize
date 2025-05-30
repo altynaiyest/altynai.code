@@ -1,0 +1,207 @@
+import nltk
+from nltk.tokenize import word_tokenize, sent_tokenize
+
+!pip install emoji
+!pip install language-tool-python
+!pip install razdel
+
+nltk.download('punkt')
+nltk.data.path.append('/usr/local/nltk_data')
+nltk.download('punkt_tab')
+
+
+from nltk.tokenize import sent_tokenize
+
+text = """Сегодня был отличный день! 😎 Проснулся рано и сразу пошел на пробежку, погода была просто идеальная 🌅.
+Пробежал 5 км, а потом заехал на завтрак в любимое кафе 🍽️. Я выбрал омлет и чашку горячего кофе ☕. Весь день был насыщен
+делами, но в конце я смог встретиться с друзьями. Мы сходили в парк, катались на велосипедах 🚴‍♂️ и обсуждали планы на будущее.
+Было так весело, особенно когда один из друзей упал с велосипеда 😂. Вечером посмотрели фильм в кинотеатре, и я был в восторге от сюжета 🎬.
+Завершил день чашечкой чая 🍵 и отличным настроением!"""
+
+sentences = sent_tokenize(text)
+
+
+words = word_tokenize(text)
+
+
+!pip install razdel
+
+nltk.download('punkt')
+
+import re
+from razdel import sentenize
+
+text = """Сегодня был отличный день! 😎 Проснулся рано и сразу пошел на пробежку, погода была просто идеальная 🌅.
+Пробежал 5 км, а потом заехал на завтрак в любимое кафе 🍽️. Я выбрал омлет и чашку горячего кофе ☕. Весь день был насыщен
+делами, но в конце я смог встретиться с друзьями. Мы сходили в парк, катались на велосипедах 🚴‍♂️ и обсуждали планы на будущее.
+Было так весело, особенно когда один из друзей упал с велосипеда 😂. Вечером посмотрели фильм в кинотеатре, и я был в восторге от сюжета 🎬.
+Завершил день чашечкой чая 🍵 и отличным настроением!"""
+
+text_clean = re.sub(r'[^\w\s,.\-!?]', '', text)
+
+sentences = list(sentenize(text_clean))
+substrings = [
+    f"Substring({sentence.start}, {sentence.stop}, '{sentence.text}')"
+    for sentence in sentences
+]
+
+for substring in substrings:
+    print(substring)
+
+
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('universal_tagset')
+
+import re
+
+text = """Сегодня был отличный день! 😎 Проснулся рано и сразу пошел на пробежку, погода была просто идеальная 🌅.
+Пробежал 5 км, а потом заехал на завтрак в любимое кафе 🍽️. Я выбрал омлет и чашку горячего кофе ☕. Весь день был насыщен
+делами, но в конце я смог встретиться с друзьями. Мы сходили в парк, катались на велосипедах 🚴‍♂️ и обсуждали планы на будущее.
+Было так весело, особенно когда один из друзей упал с велосипеда 😂. Вечером посмотрели фильм в кинотеатре, и я был в восторге от сюжета 🎬.
+Завершил день чашечкой чая 🍵 и отличным настроением!"""
+
+text_clean = re.sub(r'[^\w\s,.\-!?]', '', text)
+
+tokens = word_tokenize(text_clean)
+
+tokens_cleaned = [token for token in tokens if token != '']
+
+print(tokens_cleaned)
+
+
+!pip install pymorphy2
+!pip install nltk
+
+import nltk
+nltk.download('punkt')
+nltk.download('punkt_tab')
+
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+import pymorphy2
+import string
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+morph = pymorphy2.MorphAnalyzer()
+
+stop_words = set(stopwords.words('russian'))
+
+def clean_text(text):
+    text = re.sub(r'[^\w\s,.\-!?]', '', text)
+    tokens = word_tokenize(text)
+    cleaned_tokens = [
+        morph.parse(word)[0].normal_form
+        for word in tokens
+        if word.lower() not in stop_words and word not in string.punctuation
+    ]
+    return cleaned_tokens
+
+text =  """Сегодня был отличный день! 😎 Проснулся рано и сразу пошел на пробежку, погода была просто идеальная 🌅.
+Пробежал 5 км, а потом заехал на завтрак в любимое кафе 🍽️. Я выбрал омлет и чашку горячего кофе ☕. Весь день был насыщен
+делами, но в конце я смог встретиться с друзьями. Мы сходили в парк, катались на велосипедах 🚴‍♂️ и обсуждали планы на будущее.
+Было так весело, особенно когда один из друзей упал с велосипеда 😂. Вечером посмотрели фильм в кинотеатре, и я был в восторге от сюжета 🎬."""
+
+cleaned_tokens = clean_text(text)
+
+print(cleaned_tokens)
+
+
+from collections import Counter
+import string
+
+filtered_tokens = [token for token in cleaned_tokens if token not in string.punctuation]
+
+word_freq = Counter(filtered_tokens)
+
+print(word_freq)
+
+
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+
+!pip install pymorphy2
+
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import wordnet
+import pymorphy2
+
+nltk.download('punkt')
+nltk.download('wordnet')
+
+lemmatizer = nltk.WordNetLemmatizer()
+morph = pymorphy2.MorphAnalyzer()
+
+def get_wordnet_pos(tag):
+    if tag.startswith('V'):
+        return wordnet.VERB
+    elif tag.startswith('N'):
+        return wordnet.NOUN
+    elif tag.startswith('R'):
+        return wordnet.ADV
+    else:
+        return wordnet.NOUN
+
+def lemmatize_text_en(text):
+    tokens = word_tokenize(text.lower())
+    lemmatized_tokens = [lemmatizer.lemmatize(token) for token in tokens]
+    return lemmatized_tokens
+
+def lemmatize_text_ru(text):
+    tokens = text.split()
+    lemmatized_tokens = [morph.parse(token)[0].normal_form for token in tokens]
+    return lemmatized_tokens
+
+def lemmatize_text(text, language='en'):
+    if language == 'en':
+        return lemmatize_text_en(text)
+    elif language == 'ru':
+        return lemmatize_text_ru(text)
+    else:
+        return []
+
+sentences = [
+    "The bank offers a variety of savings accounts with different interest rates to suit individual needs.",
+    "Customers can easily transfer money between their accounts using the online banking platform.",
+    "Every month, the bank sends out statements detailing all transactions made during the billing cycle.",
+    "Opening a new account at the bank requires a valid ID and proof of address.",
+    "The bank's mobile app allows users to deposit checks by simply taking a photo with their phone.",
+    "Loans for purchasing homes are available with fixed or variable interest rates.",
+    "Credit cards from the bank come with various rewards programs, including cashback and travel points.",
+    "Bank employees are available to help customers understand their financial statements and plan their budgets.",
+    "Savings accounts can be linked to checking accounts to prevent overdraft fees.",
+    "The bank offers financial advice services to help customers plan for retirement.",
+    "Automatic bill payment services help customers avoid missing due dates for important bills.",
+    "Bank branches provide secure safety deposit boxes for storing valuable items.",
+    "Customers can apply for personal loans to cover unexpected expenses or consolidate debt.",
+    "Online banking allows users to set up alerts for low balances or large transactions.",
+    "The bank provides educational resources to help customers understand how to manage their money.",
+    "Customers can choose from a range of investment options, including stocks and bonds.",
+    "The bank has a dedicated customer service line to assist with any account-related issues.",
+    "Mortgage specialists are available to help first-time homebuyers navigate the process.",
+    "The bank's credit monitoring service alerts customers to any changes in their credit reports.",
+    "Customers can easily update their contact information through the bank's online portal.",
+    "The bank's ATM network provides convenient access to cash withdrawals and deposits.",
+    "Foreign currency exchange services are available for customers planning international travel.",
+    "The bank's fraud protection service monitors accounts for suspicious activity.",
+    "Customers can set spending limits on their credit cards to help manage their budgets.",
+    "The bank offers a range of insurance products, including health, auto, and home insurance.",
+    "Users can download and print monthly account statements directly from the bank's website.",
+    "Small business owners can access loans and lines of credit to help grow their businesses.",
+    "The bank provides secure online payment options for shopping on various e-commerce platforms.",
+    "Mobile banking apps allow users to check their account balances on the go.",
+    "The bank's retirement accounts offer tax advantages to help customers save for the future.",
+    "Financial advisors at the bank can help customers develop long-term investment strategies.",
+    "The bank offers low-interest loans for education and other major life expenses.",
+    "Customers can make international money transfers at competitive exchange rates.",
+    "The bank's secure online platform protects customers' personal and financial information.",
+    "Home equity lines of credit are available for homeowners needing access to cash.",
+    "The bank offers fixed-term deposits with higher interest rates for long-term savings.",
+    "Customers can access their account information 24/7 through the bank's mobile app.",
+    "The bank's customer loyalty programs
